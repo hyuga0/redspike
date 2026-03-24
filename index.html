@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RED SPIKE | Elite Performance Footwear</title>
+    <!-- Tailwind CSS for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --brand-red: #ff0000;
+            --brand-dark: #0a0a0a;
+            --brand-gray: #1a1a1a;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--brand-dark);
+            color: #ffffff;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .font-sync { font-family: 'Syncopate', sans-serif; }
+
+        /* Navigation Transitions */
+        .page-section {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .page-section.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* UI Elements */
+        .glass {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .red-gradient {
+            background: linear-gradient(135deg, #ff0000 0%, #990000 100%);
+        }
+
+        .text-gradient {
+            background: linear-gradient(to right, #ffffff, #ff0000);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--brand-dark); }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--brand-red); }
+
+        /* Animation Keyframes */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(-5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        .floating { animation: float 6s ease-in-out infinite; }
+
+        /* Product Card Styles */
+        .shoe-card {
+            transition: all 0.4s ease;
+        }
+        .shoe-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-10px);
+            border-color: var(--brand-red);
+        }
+
+        .badge-new {
+            background: var(--brand-red);
+            padding: 2px 8px;
+            font-size: 10px;
+            font-weight: 800;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        /* Footer Bio Styles */
+        .dev-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: 2px solid var(--brand-red);
+            background: #222;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Modal / Toast */
+        #toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            transform: translateX(200%);
+            transition: transform 0.3s ease;
+        }
+        #toast.visible { transform: translateX(0); }
+
+        /* Added Modal Styling for Popup */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(10px);
+            z-index: 300;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.active { display: flex; }
+
+        /* Detailed Content Styling */
+        .policy-content p { margin-bottom: 1.5rem; color: #a1a1aa; line-height: 1.8; }
+        .policy-content h3 { font-size: 1.5rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; color: #fff; }
+
+        /* Long Page Content Helpers */
+        .tech-table td { padding: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Toast Notification -->
+    <div id="toast" class="glass px-6 py-4 rounded-xl border-l-4 border-red-600 shadow-2xl">
+        <div class="flex items-center gap-3">
+            <i class="fas fa-check-circle text-red-600 text-xl"></i>
+            <div>
+                <p class="font-bold text-sm">Action Successful</p>
+                <p class="text-xs text-gray-400">Request has been processed.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CART POPUP MODAL (Add to Cart Result) -->
+    <div id="cart-modal" class="modal-overlay">
+        <div class="glass max-w-lg w-full p-8 rounded-[2.5rem] border border-white/10 shadow-2xl relative">
+            <button onclick="closeModal()" class="absolute top-6 right-6 text-gray-500 hover:text-white transition">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 red-gradient rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-shopping-basket text-2xl text-white"></i>
+                </div>
+                <h3 class="text-2xl font-black font-sync uppercase">Added to <span class="text-red-600">Bag</span></h3>
+            </div>
+            <div id="modal-item-details" class="flex gap-6 items-center mb-8 p-4 bg-white/5 rounded-2xl">
+                <!-- Content injected by JS -->
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="closeModal()" class="glass py-4 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition">Continue Shopping</button>
+                <button onclick="navigateTo('shop'); closeModal(); toggleCart();" class="red-gradient py-4 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg hover:scale-[1.02] transition">View Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="fixed top-0 w-full z-[100] glass border-b border-white/5">
+        <nav class="container mx-auto px-6 h-20 flex justify-between items-center">
+            <!-- Logo -->
+            <div class="flex items-center gap-3 cursor-pointer group" onclick="navigateTo('home')">
+                <div class="w-10 h-10 red-gradient rounded flex items-center justify-center transform group-hover:rotate-180 transition-transform duration-500">
+                    <i class="fas fa-bolt text-white text-xl"></i>
+                </div>
+                <div class="flex flex-col leading-none">
+                    <span class="text-2xl font-black font-sync tracking-tighter uppercase">RED<span class="text-red-600">SPIKE</span></span>
+                    <span class="text-[8px] tracking-[0.3em] font-bold text-gray-500 uppercase">Pro Performance</span>
+                </div>
+            </div>
+
+            <!-- Desktop Links -->
+            <div class="hidden lg:flex items-center space-x-10">
+                <button onclick="navigateTo('home')" class="nav-btn text-xs font-bold uppercase tracking-widest hover:text-red-600 transition" id="link-home">Home</button>
+                <div class="relative group">
+                    <button onclick="navigateTo('shop', 'all')" class="nav-btn text-xs font-bold uppercase tracking-widest hover:text-red-600 transition flex items-center gap-1" id="link-shop">
+                        Shop <i class="fas fa-chevron-down text-[8px]"></i>
+                    </button>
+                    <!-- Mega Menu Dropdown -->
+                    <div class="absolute top-full left-0 w-48 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+                        <div class="glass p-4 rounded-xl border border-white/10 flex flex-col gap-2">
+                            <button onclick="navigateTo('shop', 'new')" class="text-left px-3 py-2 text-[10px] uppercase tracking-wider hover:bg-red-600/20 rounded">New Arrivals</button>
+                            <button onclick="navigateTo('shop', 'running')" class="text-left px-3 py-2 text-[10px] uppercase tracking-wider hover:bg-red-600/20 rounded">Running</button>
+                            <button onclick="navigateTo('shop', 'basketball')" class="text-left px-3 py-2 text-[10px] uppercase tracking-wider hover:bg-red-600/20 rounded">Basketball</button>
+                            <button onclick="navigateTo('shop', 'training')" class="text-left px-3 py-2 text-[10px] uppercase tracking-wider hover:bg-red-600/20 rounded">Training</button>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="navigateTo('about')" class="nav-btn text-xs font-bold uppercase tracking-widest hover:text-red-600 transition" id="link-about">About</button>
+                <button onclick="navigateTo('contact')" class="nav-btn text-xs font-bold uppercase tracking-widest hover:text-red-600 transition" id="link-contact">Contact</button>
+            </div>
+
+            <!-- Icons -->
+            <div class="flex items-center gap-6">
+                <div class="hidden md:flex items-center glass px-4 py-2 rounded-full border border-white/10 group">
+                    <i class="fas fa-search text-gray-500 text-sm group-focus-within:text-red-600 transition"></i>
+                    <input type="text" placeholder="Search elite gear..." class="bg-transparent border-none outline-none text-xs ml-3 w-32 focus:w-48 transition-all">
+                </div>
+                <button class="relative group" onclick="toggleCart()">
+                    <i class="fas fa-shopping-cart text-lg group-hover:text-red-600 transition"></i>
+                    <span id="cart-count" class="absolute -top-2 -right-2 w-4 h-4 red-gradient rounded-full text-[9px] flex items-center justify-center font-bold">0</span>
+                </button>
+                <button class="lg:hidden" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="min-h-screen pt-20">
+
+        <!-- 1. HOME SECTION -->
+        <section id="home" class="page-section active">
+            <!-- Hero -->
+            <div class="relative h-[90vh] flex items-center overflow-hidden">
+                <div class="absolute inset-0 z-0">
+                    <div class="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent z-10"></div>
+                    <img src="https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&q=80&w=2000" alt="Hero Background" class="w-full h-full object-cover">
+                </div>
+
+                <div class="container mx-auto px-6 relative z-20">
+                    <div class="max-w-3xl">
+                        <span class="inline-block px-4 py-1 glass rounded-full text-red-600 text-[10px] font-black tracking-[0.3em] uppercase mb-6 border border-red-600/30">Edition 2024 Release</span>
+                        <h1 class="text-7xl md:text-9xl font-black font-sync leading-none mb-8 tracking-tighter">
+                            IGNITE THE <span class="text-gradient">SPIKE.</span>
+                        </h1>
+                        <p class="text-lg text-gray-400 mb-10 max-w-xl leading-relaxed">
+                            Engineered for the elite. The RS-Omega series features our patented Carbon-Spike plate and Reactive-Nitrogen foam for 35% more energy return.
+                        </p>
+                        <div class="flex flex-wrap gap-4">
+                            <button onclick="navigateTo('shop')" class="red-gradient px-10 py-5 rounded-full text-sm font-black uppercase tracking-widest hover:scale-105 hover:shadow-[0_0_30px_rgba(255,0,0,0.4)] transition-all">Shop Collection</button>
+                            <button onclick="navigateTo('about')" class="glass px-10 py-5 rounded-full text-sm font-black uppercase tracking-widest border border-white/10 hover:bg-white hover:text-black transition-all">Our Tech</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Floating Shoe Visual -->
+                <div class="absolute right-[-10%] top-[20%] hidden xl:block w-1/2 floating pointer-events-none">
+                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=1000" alt="Shoe" class="w-full h-auto drop-shadow-[0_35px_35px_rgba(255,0,0,0.3)]">
+                </div>
+            </div>
+
+            <!-- Features Grid -->
+            <div class="bg-zinc-950 py-24 border-y border-white/5">
+                <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12">
+                    <div class="flex gap-6">
+                        <div class="text-red-600 text-4xl"><i class="fas fa-wind"></i></div>
+                        <div>
+                            <h4 class="font-bold text-lg mb-2">Aero-Dynamic Shell</h4>
+                            <p class="text-gray-500 text-sm">Reduced drag by 12% with our proprietary seamless micro-mesh upper.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-6">
+                        <div class="text-red-600 text-4xl"><i class="fas fa-layer-group"></i></div>
+                        <div>
+                            <h4 class="font-bold text-lg mb-2">Nitrogen Injection</h4>
+                            <p class="text-gray-500 text-sm">Every stride is cushioned by nitrogen-infused midsole particles.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-6">
+                        <div class="text-red-600 text-4xl"><i class="fas fa-shield-alt"></i></div>
+                        <div>
+                            <h4 class="font-bold text-lg mb-2">Carbon Lockdown</h4>
+                            <p class="text-gray-500 text-sm">Heel-to-toe carbon fiber plate provides unmatched stability.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technical Breakdown Section (New Long Content) -->
+            <div class="py-32 bg-black overflow-hidden">
+                <div class="container mx-auto px-6">
+                    <div class="flex flex-col lg:flex-row gap-20 items-center">
+                        <div class="lg:w-1/2">
+                            <h2 class="text-5xl font-black font-sync uppercase leading-none mb-12">The <span class="text-red-600">Mechanics</span> Of Speed</h2>
+                            <div class="space-y-12">
+                                <div class="relative pl-8 border-l-2 border-red-600">
+                                    <h4 class="text-xl font-bold mb-4">Phase 1: Impact Isolation</h4>
+                                    <p class="text-gray-400">Our reactive foam absorbs 98% of vertical vibration, converting potential energy into horizontal momentum instantly.</p>
+                                </div>
+                                <div class="relative pl-8 border-l-2 border-red-600/30">
+                                    <h4 class="text-xl font-bold mb-4">Phase 2: Carbon Recoil</h4>
+                                    <p class="text-gray-400">The full-length carbon fiber plate flexes during mid-stance and snaps back during toe-off, acting like a springboard for your foot.</p>
+                                </div>
+                                <div class="relative pl-8 border-l-2 border-red-600/10">
+                                    <h4 class="text-xl font-bold mb-4">Phase 3: Friction Mastery</h4>
+                                    <p class="text-gray-400">Hex-Grip outsoles provide multi-directional traction, ensuring no power is lost to slippage even on wet surfaces.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lg:w-1/2 relative">
+                            <div class="absolute -inset-20 bg-red-600/10 blur-[120px] rounded-full"></div>
+                            <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&q=80&w=800" class="relative z-10 rounded-[3rem] shadow-2xl border border-white/5">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The Legacy Section (New Long Content) -->
+            <div class="py-32 bg-zinc-950">
+                <div class="container mx-auto px-6">
+                    <div class="text-center max-w-4xl mx-auto mb-20">
+                        <h3 class="text-red-600 text-[10px] font-black uppercase tracking-[0.5em] mb-4">Built By Athletes</h3>
+                        <h2 class="text-6xl font-black font-sync uppercase leading-tight mb-8">The <span class="text-red-600">RED SPIKE</span> Legacy</h2>
+                        <p class="text-gray-400 text-lg leading-relaxed">Starting from a small workshop in Chandigarh, RED SPIKE has grown into a global powerhouse. We don't believe in mass production; we believe in precision engineering. Each shoe undergoes a 72-hour stress test before it leaves our facility.</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="glass p-10 rounded-3xl border border-white/5 h-[400px] flex flex-col justify-end">
+                            <h4 class="text-3xl font-black uppercase mb-4">Ethical <span class="text-red-600">Origins</span></h4>
+                            <p class="text-gray-500">100% of our carbon fiber is sourced from recycled aerospace grade materials, reducing our footprint by 40% compared to industry standards.</p>
+                        </div>
+                        <div class="glass p-10 rounded-3xl border border-white/5 h-[400px] flex flex-col justify-end bg-[url('https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&q=80&w=1000')] bg-cover bg-center">
+                            <div class="bg-black/80 p-6 rounded-2xl backdrop-blur-md">
+                                <h4 class="text-3xl font-black uppercase mb-4">Pro <span class="text-red-600">Testing</span></h4>
+                                <p class="text-gray-400 text-sm">Every prototype is tested for 500 miles on professional tracks before the final design is locked in for production.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Categories Highlights -->
+            <div class="container mx-auto px-6 py-32">
+                <div class="flex flex-col items-center mb-16">
+                    <h2 class="text-4xl font-black font-sync text-center mb-4 uppercase">The Pro Series</h2>
+                    <div class="w-24 h-1 bg-red-600"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Category Card 1 -->
+                    <div class="relative h-[500px] group overflow-hidden rounded-3xl cursor-pointer" onclick="navigateTo('shop', 'running')">
+                        <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                        <div class="absolute bottom-10 left-10">
+                            <h3 class="text-3xl font-black font-sync uppercase">Running</h3>
+                            <span class="text-red-600 font-bold uppercase text-xs tracking-widest">Explore Velocity →</span>
+                        </div>
+                    </div>
+                    <!-- Category Card 2 -->
+                    <div class="relative h-[500px] group overflow-hidden rounded-3xl cursor-pointer" onclick="navigateTo('shop', 'basketball')">
+                        <img src="https://images.unsplash.com/photo-1505784045224-1247b2b29cf3?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                        <div class="absolute bottom-10 left-10">
+                            <h3 class="text-3xl font-black font-sync uppercase">Basketball</h3>
+                            <span class="text-red-600 font-bold uppercase text-xs tracking-widest">Court Dominance →</span>
+                        </div>
+                    </div>
+                    <!-- Category Card 3 -->
+                    <div class="relative h-[500px] group overflow-hidden rounded-3xl cursor-pointer lg:col-span-1 md:col-span-2" onclick="navigateTo('shop', 'training')">
+                        <img src="https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+                        <div class="absolute bottom-10 left-10">
+                            <h3 class="text-3xl font-black font-sync uppercase">Training</h3>
+                            <span class="text-red-600 font-bold uppercase text-xs tracking-widest">Power & Grip →</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Global Impact (New Long Content) -->
+            <div class="container mx-auto px-6 py-32 border-t border-white/5">
+                <div class="grid lg:grid-cols-3 gap-20">
+                    <div class="col-span-1">
+                        <h2 class="text-4xl font-black font-sync uppercase leading-tight mb-6">World Wide <br><span class="text-red-600">Sync.</span></h2>
+                        <p class="text-gray-500 mb-8">RED SPIKE is currently the official footwear partner for over 45 international sports academies, spanning from the bustling streets of Chandigarh to the elite tracks of London.</p>
+                        <button class="text-red-600 font-bold uppercase text-xs tracking-widest border-b-2 border-red-600 pb-2">View Global Partners</button>
+                    </div>
+                    <div class="col-span-2 grid grid-cols-2 gap-8">
+                        <div class="glass p-8 rounded-2xl">
+                            <h5 class="text-2xl font-bold mb-2">45+</h5>
+                            <p class="text-xs text-gray-500 uppercase tracking-widest">Pro Academies</p>
+                        </div>
+                        <div class="glass p-8 rounded-2xl">
+                            <h5 class="text-2xl font-bold mb-2">200k</h5>
+                            <p class="text-xs text-gray-500 uppercase tracking-widest">Community Members</p>
+                        </div>
+                        <div class="glass p-8 rounded-2xl">
+                            <h5 class="text-2xl font-bold mb-2">12</h5>
+                            <p class="text-xs text-gray-500 uppercase tracking-widest">Innovation Labs</p>
+                        </div>
+                        <div class="glass p-8 rounded-2xl">
+                            <h5 class="text-2xl font-bold mb-2">0.0%</h5>
+                            <p class="text-xs text-gray-500 uppercase tracking-widest">Compromise Rate</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. SHOP SECTION (EXPANDED TO 32 PRODUCTS) -->
+        <section id="shop" class="page-section">
+            <div class="container mx-auto px-6 py-12">
+                <div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-16">
+                    <div>
+                        <h2 class="text-6xl font-black font-sync uppercase leading-none">THE <span class="text-red-600">INVENTORY</span></h2>
+                        <p class="text-gray-500 mt-4 uppercase tracking-[0.2em] text-xs">Total Products: <span id="product-count">32</span> / Displaying: <span id="current-filter-label">All</span></p>
+                    </div>
+                    <!-- Categories Filtering Tabs -->
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="filterShop('all')" class="shop-tab px-6 py-2 rounded-lg glass text-[10px] font-bold uppercase tracking-widest hover:border-red-600 transition active" data-cat="all">All Gear</button>
+                        <button onclick="filterShop('new')" class="shop-tab px-6 py-2 rounded-lg glass text-[10px] font-bold uppercase tracking-widest hover:border-red-600 transition" data-cat="new">New</button>
+                        <button onclick="filterShop('running')" class="shop-tab px-6 py-2 rounded-lg glass text-[10px] font-bold uppercase tracking-widest hover:border-red-600 transition" data-cat="running">Running</button>
+                        <button onclick="filterShop('basketball')" class="shop-tab px-6 py-2 rounded-lg glass text-[10px] font-bold uppercase tracking-widest hover:border-red-600 transition" data-cat="basketball">Basketball</button>
+                        <button onclick="filterShop('training')" class="shop-tab px-6 py-2 rounded-lg glass text-[10px] font-bold uppercase tracking-widest hover:border-red-600 transition" data-cat="training">Training</button>
+                    </div>
+                </div>
+
+                <!-- Product Grid -->
+                <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                    <!-- Cards will be injected by JavaScript for scalability -->
+                </div>
+
+                <!-- Sizing Guide (New Long Content Inside Shop) -->
+                <div class="mt-32 border-t border-white/5 pt-24">
+                    <div class="max-w-4xl mx-auto">
+                        <h3 class="text-3xl font-black font-sync uppercase text-center mb-16">The Sizing <span class="text-red-600">Standard</span></h3>
+                        <div class="glass rounded-[3rem] overflow-hidden">
+                            <table class="w-full tech-table text-left">
+                                <thead class="bg-white/5 text-[10px] font-black uppercase tracking-[0.3em] text-gray-500">
+                                    <tr>
+                                        <th class="p-6">Region</th>
+                                        <th class="p-6">Pro Sizing</th>
+                                        <th class="p-6">Centimeters</th>
+                                        <th class="p-6">Recommendation</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-sm">
+                                    <tr><td>US</td><td>8 - 14</td><td>26.5 - 31.5</td><td>True to size</td></tr>
+                                    <tr><td>UK</td><td>7 - 13</td><td>26.5 - 31.5</td><td>Go up 0.5</td></tr>
+                                    <tr><td>EU</td><td>41 - 47</td><td>26.5 - 31.5</td><td>True to size</td></tr>
+                                    <tr><td>IND</td><td>7 - 13</td><td>26.0 - 31.0</td><td>Durable Fit</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. ABOUT SECTION (EXPANDED) -->
+        <section id="about" class="page-section">
+            <div class="container mx-auto px-6 py-24">
+                <div class="grid lg:grid-cols-2 gap-24 items-center mb-32">
+                    <div>
+                        <span class="text-red-600 font-black uppercase text-xs tracking-widest mb-4 inline-block">Established 2024</span>
+                        <h2 class="text-6xl font-black font-sync uppercase leading-tight mb-8">Evolution of <span class="text-red-600">Performance.</span></h2>
+                        <div class="space-y-6 text-gray-400 leading-relaxed text-lg">
+                            <p>RED SPIKE wasn't born in a boardroom. It was born on the track, during the final 100 meters where every millisecond counts. We realized that standard footwear was leaking energy—energy that athletes were working hard to generate.</p>
+                            <p>Our mission is simple: **Zero Leakage.** We engineer footwear that acts as an extension of your biomechanics. Through hundreds of iterations and elite testing in Chandigarh, we've developed the Spike Architecture.</p>
+                        </div>
+                        <div class="mt-12 flex gap-8">
+                            <div>
+                                <h5 class="text-3xl font-black text-white">400+</h5>
+                                <p class="text-xs text-gray-600 uppercase font-bold">Prototypes</p>
+                            </div>
+                            <div>
+                                <h5 class="text-3xl font-black text-white">2.5k</h5>
+                                <p class="text-xs text-gray-600 uppercase font-bold">Pro Athletes</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <div class="absolute -inset-4 border-2 border-red-600/20 rounded-3xl -rotate-3"></div>
+                        <img src="https://images.unsplash.com/photo-1579333104550-5fa8693a652e?auto=format&fit=crop&q=80&w=1000" class="rounded-3xl shadow-2xl relative z-10 grayscale hover:grayscale-0 transition duration-700">
+                    </div>
+                </div>
+
+                <!-- Deep Dive Content (Extra Length) -->
+                <div class="py-24 border-y border-white/5 mb-24">
+                    <h3 class="text-4xl font-black font-sync uppercase mb-12 text-center">Beyond <span class="text-red-600">The Fabric</span></h3>
+                    <div class="grid md:grid-cols-2 gap-16">
+                        <div>
+                            <h5 class="text-xl font-bold mb-4">Acoustic Engineering</h5>
+                            <p class="text-gray-500 mb-6">We study the sound of a footstrike. A RED SPIKE strike is tuned to produce a specific low-frequency resonance that indicates perfect energy transfer. If it doesn't sound right, it's not a RED SPIKE.</p>
+                        </div>
+                        <div>
+                            <h5 class="text-xl font-bold mb-4">Chemical Bonding</h5>
+                            <p class="text-gray-500 mb-6">We use solvent-free, water-based adhesives that form a molecular bond between the upper and the sole, ensuring the shoe never separates under high-heat competition environments.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lab Deep Dive -->
+                <div class="glass p-12 rounded-[3rem] border border-white/10">
+                    <h3 class="text-3xl font-black font-sync uppercase mb-12 text-center">The Spike Lab</h3>
+                    <div class="grid md:grid-cols-3 gap-12">
+                        <div class="text-center group">
+                            <div class="w-20 h-20 bg-zinc-900 rounded-full flex items-center justify-center mx-auto mb-6 border border-white/5 group-hover:border-red-600 transition">
+                                <i class="fas fa-microscope text-2xl text-red-600"></i>
+                            </div>
+                            <h4 class="font-bold mb-4">Precision Analysis</h4>
+                            <p class="text-gray-500 text-sm">Every sole is laser-measured to ensuring 0.01mm accuracy in density distribution across the strike zone.</p>
+                        </div>
+                        <div class="text-center group">
+                            <div class="w-20 h-20 bg-zinc-900 rounded-full flex items-center justify-center mx-auto mb-6 border border-white/5 group-hover:border-red-600 transition">
+                                <i class="fas fa-vial text-2xl text-red-600"></i>
+                            </div>
+                            <h4 class="font-bold mb-4">Material Bio-Synth</h4>
+                            <p class="text-gray-500 text-sm">We develop our own synthetic polymers in-house to ensure longevity and chemical stability under extreme friction.</p>
+                        </div>
+                        <div class="text-center group">
+                            <div class="w-20 h-20 bg-zinc-900 rounded-full flex items-center justify-center mx-auto mb-6 border border-white/5 group-hover:border-red-600 transition">
+                                <i class="fas fa-wind text-2xl text-red-600"></i>
+                            </div>
+                            <h4 class="font-bold mb-4">Wind-Tunnel Testing</h4>
+                            <p class="text-gray-500 text-sm">Our elite sprinting spikes are wind-tunnel tested to ensure the upper texture minimizes air turbulence.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. CONTACT SECTION -->
+        <section id="contact" class="page-section">
+            <div class="container mx-auto px-6 py-24">
+                <div class="max-w-6xl mx-auto grid lg:grid-cols-2 gap-16">
+                    <div>
+                        <h2 class="text-5xl font-black font-sync uppercase mb-6 leading-none">CONNECT WITH <span class="text-red-600">HQ.</span></h2>
+                        <p class="text-gray-400 mb-12 text-lg">Questions about sizing, custom builds, or pro sponsorships? Our team is standing by.</p>
+                        
+                        <div class="space-y-8">
+                            <div class="flex items-center gap-6">
+                                <div class="w-12 h-12 glass rounded-full flex items-center justify-center text-red-600"><i class="fas fa-map-marker-alt"></i></div>
+                                <div>
+                                    <h5 class="font-bold">Global Headquarters</h5>
+                                    <p class="text-gray-500 text-sm">Sector 10, Chandigarh, India (DAV-10 Hub)</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-6">
+                                <div class="w-12 h-12 glass rounded-full flex items-center justify-center text-red-600"><i class="fas fa-phone-alt"></i></div>
+                                <div>
+                                    <h5 class="font-bold">Direct Support</h5>
+                                    <p class="text-gray-500 text-sm">+91 000 123 4567</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-6">
+                                <div class="w-12 h-12 glass rounded-full flex items-center justify-center text-red-600"><i class="fas fa-envelope"></i></div>
+                                <div>
+                                    <h5 class="font-bold">Email Inquiries</h5>
+                                    <p class="text-gray-500 text-sm">support@redspike.com</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass p-12 rounded-[2rem] border border-white/10 relative">
+                        <form id="contact-form" class="space-y-6" onsubmit="event.preventDefault(); showToast();">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div class="space-y-2">
+                                    <label class="text-[10px] uppercase font-black text-gray-500 tracking-widest">Full Name</label>
+                                    <input type="text" required class="w-full bg-white/5 border border-white/10 p-4 rounded-xl focus:border-red-600 outline-none transition text-sm">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-[10px] uppercase font-black text-gray-500 tracking-widest">Email Address</label>
+                                    <input type="email" required class="w-full bg-white/5 border border-white/10 p-4 rounded-xl focus:border-red-600 outline-none transition text-sm">
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[10px] uppercase font-black text-gray-500 tracking-widest">Inquiry Type</label>
+                                <select class="w-full bg-white/5 border border-white/10 p-4 rounded-xl focus:border-red-600 outline-none transition text-sm appearance-none">
+                                    <option class="bg-black">General Inquiry</option>
+                                    <option class="bg-black">Sponsorship</option>
+                                    <option class="bg-black">Bulk Orders</option>
+                                    <option class="bg-black">Technical Support</option>
+                                </select>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[10px] uppercase font-black text-gray-500 tracking-widest">Your Message</label>
+                                <textarea rows="5" required class="w-full bg-white/5 border border-white/10 p-4 rounded-xl focus:border-red-600 outline-none transition text-sm"></textarea>
+                            </div>
+                            <button type="submit" class="w-full red-gradient py-5 rounded-xl text-sm font-black uppercase tracking-widest hover:opacity-90 transition">Transmit Inquiry</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. POLICY SECTIONS (SHIPPING, RETURNS, PRIVACY) -->
+        <section id="policy" class="page-section">
+            <div class="container mx-auto px-6 py-24 max-w-4xl">
+                <div id="policy-content" class="policy-content">
+                    <!-- Content dynamic -->
+                </div>
+                <div class="mt-20 pt-10 border-t border-white/10 text-center">
+                    <button onclick="navigateTo('home')" class="text-red-600 font-bold uppercase text-xs tracking-[0.3em] hover:tracking-[0.4em] transition-all">Back to Home</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. ORDER STATUS SECTION -->
+        <section id="status" class="page-section">
+            <div class="container mx-auto px-6 py-24 max-w-3xl">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-black font-sync uppercase mb-4">Track Your <span class="text-red-600">Spike.</span></h2>
+                    <p class="text-gray-500 uppercase tracking-widest text-[10px]">Enter your tracking number below</p>
+                </div>
+                
+                <div class="glass p-12 rounded-[2rem] border border-white/10">
+                    <div class="flex gap-4 mb-12">
+                        <input type="text" id="track-id" placeholder="RS-99887766..." class="flex-grow bg-white/5 border border-white/10 p-5 rounded-xl focus:border-red-600 outline-none transition uppercase font-mono">
+                        <button onclick="simulateTracking()" class="red-gradient px-8 rounded-xl font-black text-xs uppercase tracking-widest">Locate</button>
+                    </div>
+
+                    <div id="tracking-result" class="hidden">
+                        <div class="flex justify-between items-center mb-10">
+                            <div>
+                                <p class="text-[10px] text-gray-500 uppercase font-black">Estimated Delivery</p>
+                                <p class="text-xl font-bold">Oct 24, 2024</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-[10px] text-gray-500 uppercase font-black">Carrier</p>
+                                <p class="text-xl font-bold text-red-600">RED SPIKE EXPRESS</p>
+                            </div>
+                        </div>
+
+                        <!-- Progress Bar -->
+                        <div class="relative h-1 bg-white/10 rounded-full mb-12">
+                            <div class="absolute left-0 top-0 h-full w-3/4 red-gradient rounded-full"></div>
+                            <div class="absolute top-1/2 left-[0%] -translate-y-1/2 w-4 h-4 rounded-full bg-red-600 border-4 border-black"></div>
+                            <div class="absolute top-1/2 left-[33%] -translate-y-1/2 w-4 h-4 rounded-full bg-red-600 border-4 border-black"></div>
+                            <div class="absolute top-1/2 left-[66%] -translate-y-1/2 w-4 h-4 rounded-full bg-red-600 border-4 border-black"></div>
+                            <div class="absolute top-1/2 left-[100%] -translate-y-1/2 w-4 h-4 rounded-full bg-white/10 border-4 border-black"></div>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div class="flex gap-6 items-start opacity-100">
+                                <div class="w-2 h-2 rounded-full bg-red-600 mt-2 shadow-[0_0_10px_#ff0000]"></div>
+                                <div>
+                                    <p class="font-bold text-sm">Departed Hub - Chandigarh</p>
+                                    <p class="text-xs text-gray-500">Oct 20, 2024 | 14:30</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-6 items-start opacity-60">
+                                <div class="w-2 h-2 rounded-full bg-gray-600 mt-2"></div>
+                                <div>
+                                    <p class="font-bold text-sm">Processing Center</p>
+                                    <p class="text-xs text-gray-500">Oct 19, 2024 | 09:12</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-black pt-24 pb-12 border-t border-white/5">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-20">
+                <!-- Branding -->
+                <div class="col-span-1">
+                    <div class="flex items-center gap-3 mb-8">
+                        <div class="w-8 h-8 red-gradient rounded transform rotate-45 flex items-center justify-center">
+                            <i class="fas fa-bolt text-white text-[12px] -rotate-45"></i>
+                        </div>
+                        <span class="text-xl font-black font-sync tracking-tighter uppercase">RED<span class="text-red-600">SPIKE</span></span>
+                    </div>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-8">
+                        Elite performance footwear engineered for the bold. Join the revolution in athletic propulsion.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 glass rounded-full flex items-center justify-center hover:text-red-600 transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="w-10 h-10 glass rounded-full flex items-center justify-center hover:text-red-600 transition"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="w-10 h-10 glass rounded-full flex items-center justify-center hover:text-red-600 transition"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="w-10 h-10 glass rounded-full flex items-center justify-center hover:text-red-600 transition"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+
+                <!-- Collections -->
+                <div>
+                    <h4 class="text-white font-bold uppercase text-[10px] tracking-[0.3em] mb-8">Collections</h4>
+                    <ul class="space-y-4 text-gray-500 text-sm font-medium">
+                        <li><button onclick="navigateTo('shop', 'new')" class="hover:text-red-600 transition">New Arrivals</button></li>
+                        <li><button onclick="navigateTo('shop', 'running')" class="hover:text-red-600 transition">Running</button></li>
+                        <li><button onclick="navigateTo('shop', 'basketball')" class="hover:text-red-600 transition">Basketball</button></li>
+                        <li><button onclick="navigateTo('shop', 'training')" class="hover:text-red-600 transition">Training</button></li>
+                        <li><button class="hover:text-red-600 transition">Limited Drops</button></li>
+                    </ul>
+                </div>
+
+                <!-- Support Links -->
+                <div>
+                    <h4 class="text-white font-bold uppercase text-[10px] tracking-[0.3em] mb-8">Service Hub</h4>
+                    <ul class="space-y-4 text-gray-500 text-sm font-medium">
+                        <li><button onclick="navigateTo('status')" class="hover:text-red-600 transition">Order Status</button></li>
+                        <li><button onclick="navigateTo('policy', 'shipping')" class="hover:text-red-600 transition">Shipping Policy</button></li>
+                        <li><button onclick="navigateTo('policy', 'returns')" class="hover:text-red-600 transition">Returns & Exchanges</button></li>
+                        <li><button onclick="navigateTo('policy', 'privacy')" class="hover:text-red-600 transition">Privacy Policy</button></li>
+                        <li><button onclick="navigateTo('contact')" class="hover:text-red-600 transition">Contact Support</button></li>
+                    </ul>
+                </div>
+
+                <!-- DEVELOPER CARD -->
+                <div class="glass p-8 rounded-3xl border border-white/10">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="dev-avatar">
+                            <!-- Circular placeholder icon for image -->
+                            <i class="fas fa-user-tie text-gray-500 text-2xl"></i>
+                            <img src="Ansh Kad.JPG" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white tracking-tight">Ansh Kad</h4>
+                            <p class="text-[9px] text-red-600 uppercase font-black tracking-widest">Architect</p>
+                        </div>
+                    </div>
+                    <p class="text-[11px] text-gray-400 leading-relaxed mb-6">
+                        Student at DAV-10 Chandigarh, PGDCA, Panjab University. Building the digital future of footwear.
+                    </p>
+                    <div class="flex items-center gap-3">
+                        <a href="#" class="text-xs text-white/40 hover:text-red-600"><i class="fab fa-github"></i></a>
+                        <a href="#" class="text-xs text-white/40 hover:text-red-600"><i class="fab fa-linkedin-in"></i></a>
+                        <div class="ml-auto flex items-center gap-1 text-[8px] uppercase font-bold text-gray-700">
+                            <span class="w-1 h-1 rounded-full bg-green-500 animate-pulse"></span> Available
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-white/5 pt-10 flex flex-col md:flex-row justify-between items-center text-gray-600 text-[10px] font-black tracking-[0.4em] uppercase">
+                <p>&copy; 2024 RED SPIKE INDUSTRIES GLOBAL. NO COMPROMISE.</p>
+                <div class="flex gap-8 mt-6 md:mt-0">
+                    <p>Designed by Ansh Kad</p>
+                    <p>Terms</p>
+                    <p>Cookies</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- CART SIDEBAR (HIDDEN BY DEFAULT) -->
+    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-[450px] glass z-[200] translate-x-full transition-transform duration-500 shadow-2xl border-l border-white/10">
+        <div class="p-8 flex flex-col h-full">
+            <div class="flex justify-between items-center mb-10">
+                <h3 class="text-2xl font-black font-sync uppercase">Cart <span id="cart-count-title" class="text-gray-500">(0)</span></h3>
+                <button onclick="toggleCart()" class="text-gray-500 hover:text-white transition"><i class="fas fa-times text-2xl"></i></button>
+            </div>
+
+            <div id="cart-items" class="flex-grow overflow-y-auto space-y-6">
+                <!-- Cart Items -->
+                <div class="text-center py-20 opacity-30">
+                    <i class="fas fa-shopping-bag text-5xl mb-4"></i>
+                    <p class="uppercase text-[10px] font-bold tracking-[0.2em]">Your bag is empty.</p>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-white/10">
+                <div class="flex justify-between items-center mb-6">
+                    <span class="text-gray-500 uppercase text-xs font-bold">Estimated Total</span>
+                    <span id="cart-total" class="text-xl font-bold">$0.00</span>
+                </div>
+                <button class="w-full red-gradient py-5 rounded-xl font-black uppercase text-sm tracking-widest hover:scale-[1.02] transition shadow-xl">Secure Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. PRODUCT DATABASE (EXPANDED TO 32) ---
+        const products = [
+            { id: 1, name: 'RS-Alpha Velocity', price: 189, cat: 'running', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff', tag: 'Bestseller' },
+            { id: 2, name: 'Court King Elite', price: 210, cat: 'basketball', img: 'https://images.unsplash.com/photo-1505784045224-1247b2b29cf3', tag: 'New' },
+            { id: 3, name: 'Training Pulse', price: 145, cat: 'training', img: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a', tag: 'Lightweight' },
+            { id: 4, name: 'Crimson Peak', price: 225, cat: 'running', img: 'https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2', tag: 'Pro Only' },
+            { id: 5, name: 'Sky Jumper', price: 195, cat: 'basketball', img: 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa', tag: 'New' },
+            { id: 6, name: 'Urban Spike', price: 160, cat: 'lifestyle', img: 'https://images.unsplash.com/photo-1549298916-b41d501d3772', tag: 'Limited' },
+            { id: 7, name: 'RS Nitrogen Flow', price: 240, cat: 'running', img: 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77', tag: 'Nitro' },
+            { id: 8, name: 'Pivot Master', price: 185, cat: 'basketball', img: 'https://images.unsplash.com/photo-1511556532299-8f662fc26c06', tag: 'High Top' },
+            { id: 9, name: 'Grip Force X', price: 135, cat: 'training', img: 'https://images.unsplash.com/photo-1460353581641-37baddab0fa2', tag: 'Sale' },
+            { id: 10, name: 'Midnight Racer', price: 215, cat: 'running', img: 'https://images.unsplash.com/photo-1560769629-975ec94e6a86', tag: 'Limited' },
+            { id: 11, name: 'Hoop Hybrid', price: 175, cat: 'basketball', img: 'https://images.unsplash.com/photo-1512374382149-4332c6c021f1', tag: 'Responsive' },
+            { id: 12, name: 'Titan Cross', price: 190, cat: 'training', img: 'https://images.unsplash.com/photo-1514989940723-e8e51635b782', tag: 'Heavy Duty' },
+            { id: 13, name: 'Aqua Spike', price: 155, cat: 'running', img: 'https://images.unsplash.com/photo-1605348532760-6753d2c43329', tag: 'Weatherproof' },
+            { id: 14, name: 'Stealth Bolt', price: 280, cat: 'running', img: 'https://images.unsplash.com/photo-1515955656352-a1fa3ffcd111', tag: 'Carbon 100' },
+            { id: 15, name: 'Zen Trainer', price: 125, cat: 'training', img: 'https://images.unsplash.com/photo-1556906781-9a412961c28c', tag: 'Minimalist' },
+            { id: 16, name: 'Dunk King', price: 230, cat: 'basketball', img: 'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519', tag: 'Legendary' },
+            { id: 17, name: 'Trail Blazer', price: 210, cat: 'running', img: 'https://images.unsplash.com/photo-1491553895911-0055eca6402d', tag: 'Off-Road' },
+            { id: 18, name: 'Neon Glider', price: 165, cat: 'running', img: 'https://images.unsplash.com/photo-1539185441755-769473a23570', tag: 'New' },
+            { id: 19, name: 'Power Lift Z', price: 245, cat: 'training', img: 'https://images.unsplash.com/photo-1512374382149-4332c6c021f1', tag: 'Weightlifting' },
+            { id: 20, name: 'Alley-Oop Elite', price: 195, cat: 'basketball', img: 'https://images.unsplash.com/photo-1608231387042-66d1773070a5', tag: 'Pro' },
+            { id: 21, name: 'Cloud Runner Plus', price: 180, cat: 'running', img: 'https://images.unsplash.com/photo-1560769629-975ec94e6a86', tag: 'Soft' },
+            { id: 22, name: 'Speed Strike 7', price: 140, cat: 'training', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff', tag: 'Affordable' },
+            { id: 23, name: 'Retro Hoop', price: 150, cat: 'basketball', img: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a', tag: 'Heritage' },
+            { id: 24, name: 'Ultra Boost Red', price: 260, cat: 'running', img: 'https://images.unsplash.com/photo-1515955656352-a1fa3ffcd111', tag: 'Limited Edition' },
+            { id: 25, name: 'Shadow Boxer', price: 195, cat: 'training', img: 'https://images.unsplash.com/photo-1539185441755-769473a23570', tag: 'Pro' },
+            { id: 26, name: 'Frost Bite', price: 215, cat: 'running', img: 'https://images.unsplash.com/photo-1605348532760-6753d2c43329', tag: 'Weatherproof' },
+            { id: 27, name: 'Onyx Pro', price: 290, cat: 'basketball', img: 'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519', tag: 'Carbon 100' },
+            { id: 28, name: 'Glider X', price: 150, cat: 'lifestyle', img: 'https://images.unsplash.com/photo-1549298916-b41d501d3772', tag: 'Limited' },
+            { id: 29, name: 'Vortex Blue', price: 175, cat: 'training', img: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a', tag: 'New' },
+            { id: 30, name: 'Pulse Red', price: 199, cat: 'running', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff', tag: 'Bestseller' },
+            { id: 31, name: 'Gravity Master', price: 245, cat: 'basketball', img: 'https://images.unsplash.com/photo-1505784045224-1247b2b29cf3', tag: 'Pro Only' },
+            { id: 32, name: 'Zenith White', price: 210, cat: 'lifestyle', img: 'https://images.unsplash.com/photo-1560769629-975ec94e6a86', tag: 'New' }
+        ];
+
+        let cart = [];
+
+        // --- 2. NAVIGATION LOGIC ---
+        function navigateTo(pageId, extra = null) {
+            // Remove active classes
+            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('text-red-600'));
+            
+            // Show new section
+            const target = document.getElementById(pageId);
+            if(target) target.classList.add('active');
+            
+            // Highlight nav link
+            const link = document.getElementById('link-' + pageId);
+            if(link) link.classList.add('text-red-600');
+
+            // Handle special routing
+            if(pageId === 'shop' && extra) {
+                filterShop(extra);
+            }
+            if(pageId === 'policy' && extra) {
+                loadPolicy(extra);
+            }
+
+            // Close cart and scroll up
+            document.getElementById('cart-sidebar').classList.add('translate-x-full');
+            window.scrollTo(0, 0);
+        }
+
+        // --- 3. SHOP FILTERING LOGIC ---
+        function filterShop(category) {
+            const grid = document.getElementById('product-grid');
+            const label = document.getElementById('current-filter-label');
+            label.innerText = category.toUpperCase();
+
+            // Filter products
+            const filtered = category === 'all' 
+                ? products 
+                : category === 'new' 
+                    ? products.filter(p => p.tag === 'New')
+                    : products.filter(p => p.cat === category);
+
+            // Update UI
+            grid.innerHTML = filtered.map(p => `
+                <div class="shoe-card glass p-6 rounded-3xl border border-white/10 group">
+                    <div class="relative overflow-hidden rounded-2xl mb-6 aspect-square">
+                        <img src="${p.img}?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                        <span class="absolute top-4 left-4 badge-new">${p.tag}</span>
+                        <div class="absolute inset-0 bg-red-600/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-4">
+                            <button onclick="addToCart(${p.id})" class="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center hover:bg-red-600 hover:text-white transition shadow-xl"><i class="fas fa-cart-plus"></i></button>
+                            <button class="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center hover:bg-red-600 hover:text-white transition shadow-xl"><i class="fas fa-heart"></i></button>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <p class="text-[10px] text-gray-500 font-black uppercase tracking-widest">${p.cat}</p>
+                            <h4 class="font-bold text-lg">${p.name}</h4>
+                        </div>
+                        <p class="font-black text-red-600">$${p.price}</p>
+                    </div>
+                    <button onclick="addToCart(${p.id})" class="w-full py-3 border border-red-600/30 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-red-600 transition">Quick Add</button>
+                </div>
+            `).join('');
+
+            // Highlight tab
+            document.querySelectorAll('.shop-tab').forEach(t => {
+                t.classList.remove('bg-red-600', 'border-red-600');
+                if(t.dataset.cat === category) t.classList.add('border-red-600');
+            });
+        }
+
+        // --- 4. CART & MODAL LOGIC ---
+        function toggleCart() {
+            document.getElementById('cart-sidebar').classList.toggle('translate-x-full');
+        }
+
+        function addToCart(id) {
+            const item = products.find(p => p.id === id);
+            cart.push(item);
+            updateCartUI();
+            
+            // Trigger Popup Modal
+            const modal = document.getElementById('cart-modal');
+            const details = document.getElementById('modal-item-details');
+            details.innerHTML = `
+                <img src="${item.img}" class="w-24 h-24 rounded-xl object-cover border border-white/10">
+                <div>
+                    <h5 class="text-lg font-bold">${item.name}</h5>
+                    <p class="text-red-600 font-bold">$${item.price}</p>
+                    <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-1">${item.cat}</p>
+                </div>
+            `;
+            modal.classList.add('active');
+            showToast();
+        }
+
+        function closeModal() {
+            document.getElementById('cart-modal').classList.remove('active');
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items');
+            const total = document.getElementById('cart-total');
+            const counts = document.querySelectorAll('#cart-count, #cart-count-title');
+            
+            counts.forEach(c => c.innerText = cart.length);
+            
+            if(cart.length === 0) {
+                container.innerHTML = `<div class="text-center py-20 opacity-30"><i class="fas fa-shopping-bag text-5xl mb-4"></i><p class="uppercase text-[10px] font-bold tracking-[0.2em]">Your bag is empty.</p></div>`;
+                total.innerText = '$0.00';
+                return;
+            }
+
+            let sum = 0;
+            container.innerHTML = cart.map((item, index) => {
+                sum += item.price;
+                return `
+                    <div class="flex gap-4 items-center">
+                        <img src="${item.img}" class="w-20 h-20 rounded-lg object-cover">
+                        <div class="flex-grow">
+                            <h5 class="font-bold text-sm">${item.name}</h5>
+                            <p class="text-xs text-red-600">$${item.price}</p>
+                        </div>
+                        <button onclick="removeItem(${index})" class="text-gray-600 hover:text-red-600"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+            }).join('');
+            total.innerText = `$${sum}.00`;
+        }
+
+        function removeItem(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        // --- 5. TOAST & NOTIFICATION ---
+        function showToast() {
+            const t = document.getElementById('toast');
+            t.classList.add('visible');
+            setTimeout(() => t.classList.remove('visible'), 3000);
+        }
+
+        // --- 6. POLICY CONTENT LOADER ---
+        function loadPolicy(type) {
+            const target = document.getElementById('policy-content');
+            const policies = {
+                shipping: `
+                    <h2 class="text-4xl font-black font-sync uppercase mb-10">Shipping <span class="text-red-600">Protocol</span></h2>
+                    <p>RED SPIKE uses elite logistics partners to ensure your gear arrives at terminal speed. All orders are processed within 12-24 cycles (hours).</p>
+                    <h3>Delivery Tiers</h3>
+                    <ul class="space-y-4 text-gray-400 mb-10">
+                        <li><strong>Standard Spike:</strong> 5-7 Business Days (Complimentary)</li>
+                        <li><strong>Velocity Express:</strong> 2-3 Business Days ($25.00)</li>
+                        <li><strong>Super-Sonic (Next Day):</strong> Order before 12PM for next-day delivery ($45.00)</li>
+                    </ul>
+                    <h3>Tracking</h3>
+                    <p>Once your order is processed, a unique RED-TRACK ID will be encrypted and sent to your communication relay (email).</p>
+                `,
+                returns: `
+                    <h2 class="text-4xl font-black font-sync uppercase mb-10">Return <span class="text-red-600">Vault</span></h2>
+                    <p>If the gear isn't achieving 100% synchronization, you have 30 days to return or exchange your items.</p>
+                    <h3>Conditions for Return</h3>
+                    <ul class="space-y-4 text-gray-400 mb-10">
+                        <li>Items must be in original, unworn condition.</li>
+                        <li>Original spike-box and tags must be intact.</li>
+                        <li>Include the biometric receipt provided during checkout.</li>
+                    </ul>
+                    <h3>Refund Process</h3>
+                    <p>Once inspected at our Chandigarh HQ, your credit relay will be processed within 5-10 business days.</p>
+                `,
+                privacy: `
+                    <h2 class="text-4xl font-black font-sync uppercase mb-10">Privacy <span class="text-red-600">Encrypted</span></h2>
+                    <p>Your data is as vital as your performance. We use military-grade encryption to protect your relay info.</p>
+                    <h3>Data Collection</h3>
+                    <p>We collect essential telemetry (name, address, size preferences) to optimize your shopping experience.</p>
+                    <h3>Third-Party Policy</h3>
+                    <p>RED SPIKE never sells your performance data to third-party data harvesters. We only share info with logistical partners for delivery execution.</p>
+                `
+            };
+            target.innerHTML = policies[type] || 'Content not found.';
+        }
+
+        // --- 7. TRACKING SIMULATION ---
+        function simulateTracking() {
+            const id = document.getElementById('track-id').value;
+            if(!id) return;
+            document.getElementById('tracking-result').classList.remove('hidden');
+            showToast();
+        }
+
+        // --- INIT ---
+        window.onload = () => {
+            filterShop('all');
+            loadPolicy('shipping');
+        };
+    </script>
+</body>
+</html>
